@@ -1,0 +1,166 @@
+[
+  {
+    "id": "o2_contamination",
+    "display_name": "Oxygen Contamination",
+    "stage": 2,
+    "stage_name": "PVD Deposition",
+    "description": "Oxygen gas has leaked into the vacuum chamber, contaminating the semiconductor deposition and risking oxidation of the thin film layer.",
+    "plain_english": "Air leaked into the vacuum chamber during deposition",
+    "injected_faults": {
+      "step_5":  55.3,
+      "step_14": 11.2,
+      "step_13": 3.4
+    },
+    "primary_expert": "contamination_control",
+    "secondary_expert": "defect_reduction",
+    "severity": "High"
+  },
+  {
+    "id": "vacuum_leak",
+    "display_name": "Vacuum Chamber Leak",
+    "stage": 2,
+    "stage_name": "PVD Deposition",
+    "description": "Chamber pressure has risen above the acceptable vacuum level, indicating a seal failure. This compromises the deposition environment and leads to non-uniform film growth.",
+    "plain_english": "The vacuum seal in the deposition chamber has failed",
+    "injected_faults": {
+      "step_30": 0.0018,
+      "step_7":  6.2,
+      "step_11": 83.1
+    },
+    "primary_expert": "pressure_calibration",
+    "secondary_expert": "uniformity_correction",
+    "severity": "High"
+  },
+  {
+    "id": "deposition_failure",
+    "display_name": "Thin Film Deposition Failure",
+    "stage": 2,
+    "stage_name": "PVD Deposition",
+    "description": "The semiconductor layer is not adhering properly to the substrate, and thickness uniformity has dropped below specification. This will result in poor electrical performance.",
+    "plain_english": "The semiconductor layer is not sticking evenly to the panel",
+    "injected_faults": {
+      "step_10": 6.5,
+      "step_11": 82.3,
+      "step_12": 0.63,
+      "step_15": 0.28
+    },
+    "primary_expert": "uniformity_correction",
+    "secondary_expert": "defect_reduction",
+    "severity": "High"
+  },
+  {
+    "id": "thermal_drift_activation",
+    "display_name": "Thermal Drift During Activation",
+    "stage": 3,
+    "stage_name": "CdCl₂ Activation",
+    "description": "The activation furnace temperature is deviating from the target setpoint. Improper annealing temperature will result in incomplete junction formation and increased defect density.",
+    "plain_english": "The activation oven temperature is drifting off-target",
+    "injected_faults": {
+      "step_6":  3.2,
+      "step_40": 2.7,
+      "step_18": 87.4
+    },
+    "primary_expert": "temperature_stabilization",
+    "secondary_expert": "activation_completion",
+    "severity": "Medium"
+  },
+  {
+    "id": "incomplete_activation",
+    "display_name": "Incomplete CdCl₂ Activation",
+    "stage": 3,
+    "stage_name": "CdCl₂ Activation",
+    "description": "The CdCl₂ treatment has not fully covered the cell surface, leaving areas with poorly formed junctions. New defects introduced during activation have not been adequately annealed out.",
+    "plain_english": "The chemical activation treatment did not fully cover the solar cell",
+    "injected_faults": {
+      "step_21": 68.5,
+      "step_22": 285,
+      "step_23": 54.2
+    },
+    "primary_expert": "activation_completion",
+    "secondary_expert": "defect_reduction",
+    "severity": "High"
+  },
+  {
+    "id": "grain_growth_failure",
+    "display_name": "Grain Growth Failure",
+    "stage": 4,
+    "stage_name": "Grain Growth",
+    "description": "Crystal grains have not grown to the required size during recrystallization. Small grains mean higher grain boundary resistance, directly reducing cell current and efficiency.",
+    "plain_english": "Crystal structure did not grow properly — grains are too small",
+    "injected_faults": {
+      "step_17": 2.1,
+      "step_20": 3.8,
+      "step_24": 185,
+      "step_26": 6.2
+    },
+    "primary_expert": "grain_optimization",
+    "secondary_expert": "temperature_stabilization",
+    "severity": "Medium"
+  },
+  {
+    "id": "back_contact_contamination",
+    "display_name": "Back Contact Cross-Contamination",
+    "stage": 5,
+    "stage_name": "Back Contact",
+    "description": "Metal atoms from the back contact are diffusing into the semiconductor layer, creating recombination centers that reduce short-circuit current density.",
+    "plain_english": "Metal from the back layer is leaking into the semiconductor",
+    "injected_faults": {
+      "step_39": 7.3,
+      "step_41": 17.2,
+      "step_31": 4
+    },
+    "primary_expert": "defect_reduction",
+    "secondary_expert": "quality_control",
+    "severity": "High"
+  },
+  {
+    "id": "scribing_error",
+    "display_name": "Laser Scribing Misalignment",
+    "stage": 6,
+    "stage_name": "Laser Scribing",
+    "description": "The laser scribing lines are deviating from their programmed positions, creating cell interconnect failures. Recurrent defects suggest the issue is systematic, not a one-off event.",
+    "plain_english": "The laser that cuts the panel into cells is cutting in the wrong place",
+    "injected_faults": {
+      "step_28": 28.4,
+      "step_16": 14,
+      "step_37": 12.5,
+      "step_38": 1
+    },
+    "primary_expert": "cross_process",
+    "secondary_expert": "maintenance",
+    "severity": "Medium"
+  },
+  {
+    "id": "low_efficiency",
+    "display_name": "Low Cell Efficiency",
+    "stage": 7,
+    "stage_name": "QA Testing",
+    "description": "Final electrical testing shows efficiency and fill factor are below the minimum specification. This is a downstream symptom — the root cause likely lies in an upstream process stage.",
+    "plain_english": "The finished solar cells are not generating enough electricity",
+    "injected_faults": {
+      "step_33": 13.2,
+      "step_49": 57.8,
+      "step_32": 17.5,
+      "step_4":  580
+    },
+    "primary_expert": "efficiency",
+    "secondary_expert": "quality_control",
+    "severity": "High"
+  },
+  {
+    "id": "particle_contamination",
+    "display_name": "Particle Contamination",
+    "stage": 1,
+    "stage_name": "Surface Preparation",
+    "description": "Elevated particle density on the wafer surface and high airborne particle count in the cleanroom indicate a contamination event. Particles at this stage embed into the semiconductor layers and cause localized shunting.",
+    "plain_english": "Dust particles are contaminating the panel surface before processing begins",
+    "injected_faults": {
+      "step_2":  650,
+      "step_35": 7800,
+      "step_29": 12.3
+    },
+    "primary_expert": "contamination_control",
+    "secondary_expert": "defect_reduction",
+    "severity": "Medium"
+  }
+]
