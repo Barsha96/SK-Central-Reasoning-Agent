@@ -10,27 +10,26 @@ import plotly.express as px
 from plotly.subplots import make_subplots
 from pathlib import Path
 import streamlit as st
+from utils.theme import apply_theme, page_css, plotly_colors, heatmap_colorscale
 
 # ── Global style ─────────────────────────────────────────────────────────────
-st.markdown("""
-<style>
-.stApp { background-color: #0f1117; }
-#MainMenu { visibility: hidden; }
-footer { visibility: hidden; }
-.stDeployButton { display: none; }
-h1, h2, h3 { color: #7eb3d4 !important; }
-.block-container { padding-top: 1rem !important; }
-.disclaimer-box {
-    background: #1a2a1a; border: 1px solid #2a5a2a;
+_dark = st.session_state.get("dark_mode", False)
+_disc_bg     = "#1a2a1a" if _dark else "#eaf6ea"
+_disc_border = "#2a5a2a" if _dark else "#2a8a2a"
+_chip_bg     = "#1a3a5c" if _dark else "#c8dff2"
+_chip_color  = "#7eb3d4" if _dark else "#1a5a8a"
+
+st.markdown(page_css(f"""
+.disclaimer-box {{
+    background: {_disc_bg}; border: 1px solid {_disc_border};
     border-radius: 8px; padding: 14px 18px; margin-bottom: 16px;
-}
-.stage-chip {
+}}
+.stage-chip {{
     display: inline-block; padding: 2px 10px;
     border-radius: 12px; font-size: 11px; font-weight: 600;
-    background: #1a3a5c; color: #7eb3d4; margin-right: 6px;
-}
-</style>
-""", unsafe_allow_html=True)
+    background: {_chip_bg}; color: {_chip_color}; margin-right: 6px;
+}}
+"""), unsafe_allow_html=True)
 
 # ── Load data ────────────────────────────────────────────────────────────────
 CONFIG_DIR = Path(__file__).parent.parent / "config"
@@ -261,15 +260,16 @@ with tab2:
                     annotation_position="top right",
                 )
 
+            _bg, _grid, _fc = plotly_colors()
             fig.update_layout(
                 title=dict(text=f"{meta['name']}<br><sup>{meta['unit']}</sup>", font_size=11),
                 height=200,
                 margin=dict(l=30, r=10, t=45, b=30),
-                paper_bgcolor="#0f1117",
-                plot_bgcolor="#0f1117",
-                font_color="#a0aec0",
-                xaxis=dict(showgrid=True, gridcolor="#1a1d27"),
-                yaxis=dict(showgrid=True, gridcolor="#1a1d27", title="Count"),
+                paper_bgcolor=_bg,
+                plot_bgcolor=_bg,
+                font_color=_fc,
+                xaxis=dict(showgrid=True, gridcolor=_grid),
+                yaxis=dict(showgrid=True, gridcolor=_grid, title="Count"),
             )
 
             with cols[col_i]:
@@ -319,15 +319,17 @@ with tab3:
 
             with col_b:
                 st.markdown(
-                    f"<div style='text-align:center; padding: 16px; background:#1a1d27; "
-                    f"border-radius:8px; border: 2px solid {severity_color};'>"
-                    f"<div style='font-size:11px; color:#888; text-transform:uppercase; letter-spacing:1px;'>Severity</div>"
-                    f"<div style='font-size:22px; font-weight:800; color:{severity_color};'>"
-                    f"{sc.get('severity','Medium')}</div>"
-                    f"<div style='font-size:11px; color:#888; margin-top:8px;'>Stage</div>"
-                    f"<div style='font-size:16px; font-weight:700; color:#7eb3d4;'>{sc['stage']}</div>"
-                    f"<div style='font-size:10px; color:#7eb3d4;'>{sc['stage_name']}</div>"
-                    f"</div>",
+                    apply_theme(
+                        f"<div style='text-align:center; padding: 16px; background:#1a1d27; "
+                        f"border-radius:8px; border: 2px solid {severity_color};'>"
+                        f"<div style='font-size:11px; color:#888888; text-transform:uppercase; letter-spacing:1px;'>Severity</div>"
+                        f"<div style='font-size:22px; font-weight:800; color:{severity_color};'>"
+                        f"{sc.get('severity','Medium')}</div>"
+                        f"<div style='font-size:11px; color:#888888; margin-top:8px;'>Stage</div>"
+                        f"<div style='font-size:16px; font-weight:700; color:#7eb3d4;'>{sc['stage']}</div>"
+                        f"<div style='font-size:10px; color:#7eb3d4;'>{sc['stage_name']}</div>"
+                        f"</div>"
+                    ),
                     unsafe_allow_html=True,
                 )
 
@@ -374,17 +376,12 @@ with tab4:
                 row.append(0.0)
         z_color.append(row)
 
+    _bg, _grid, _fc = plotly_colors()
     fig_map = go.Figure(go.Heatmap(
         z=z_color,
         x=scenario_names,
         y=y_labels,
-        colorscale=[
-            [0.0,  "#0f1117"],
-            [0.01, "#1a2a3a"],
-            [0.3,  "#1a5276"],
-            [0.6,  "#d4a017"],
-            [1.0,  "#c0392b"],
-        ],
+        colorscale=heatmap_colorscale(),
         showscale=False,
         hovertemplate=(
             "<b>%{y}</b><br>"
@@ -396,9 +393,9 @@ with tab4:
     fig_map.update_layout(
         height=max(320, len(involved_steps) * 28),
         margin=dict(l=10, r=10, t=20, b=120),
-        paper_bgcolor="#0f1117",
-        plot_bgcolor="#0f1117",
-        font_color="#a0aec0",
+        paper_bgcolor=_bg,
+        plot_bgcolor=_bg,
+        font_color=_fc,
         font_size=10,
         xaxis=dict(
             tickangle=-40,
@@ -461,15 +458,18 @@ with tab5:
 
     # Header card
     sev_col = SEVERITY_COLOR.get(sc.get("severity", "Medium"), "#f39c12")
+    _card_text = "#4a5568" if not _dark else "#c0c0c0"
     st.markdown(
-        f"<div style='background:#1a1d27; border:1.5px solid {sev_col}; border-radius:8px; "
-        f"padding:14px 18px; margin-bottom:12px;'>"
-        f"<strong style='color:{sev_col}; font-size:16px;'>{sc['display_name']}</strong>"
-        f"<span style='float:right; background:{sev_col}; color:white; font-size:11px; "
-        f"font-weight:700; padding:2px 10px; border-radius:12px;'>{sc.get('severity','')}</span>"
-        f"<br><span style='color:#888; font-size:12px;'>Stage {sc['stage']}: {sc['stage_name']}</span>"
-        f"<br><br><span style='color:#c0c0c0;'>{sc['plain_english']}</span>"
-        f"</div>",
+        apply_theme(
+            f"<div style='background:#1a1d27; border:1.5px solid {sev_col}; border-radius:8px; "
+            f"padding:14px 18px; margin-bottom:12px;'>"
+            f"<strong style='color:{sev_col}; font-size:16px;'>{sc['display_name']}</strong>"
+            f"<span style='float:right; background:{sev_col}; color:white; font-size:11px; "
+            f"font-weight:700; padding:2px 10px; border-radius:12px;'>{sc.get('severity','')}</span>"
+            f"<br><span style='color:#888888; font-size:12px;'>Stage {sc['stage']}: {sc['stage_name']}</span>"
+            f"<br><br><span style='color:{_card_text};'>{sc['plain_english']}</span>"
+            f"</div>"
+        ),
         unsafe_allow_html=True,
     )
 
@@ -527,16 +527,17 @@ with tab5:
         opacity=0.9,
     ))
 
+    _bg, _grid, _fc = plotly_colors()
     fig_inj.update_layout(
         barmode="group",
         height=320,
         margin=dict(l=10, r=10, t=30, b=80),
-        paper_bgcolor="#0f1117",
-        plot_bgcolor="#0f1117",
-        font_color="#a0aec0",
+        paper_bgcolor=_bg,
+        plot_bgcolor=_bg,
+        font_color=_fc,
         legend=dict(orientation="h", y=1.12, bgcolor="rgba(0,0,0,0)"),
-        xaxis=dict(tickangle=-30, tickfont_size=10, gridcolor="#1a1d27"),
-        yaxis=dict(gridcolor="#1a1d27"),
+        xaxis=dict(tickangle=-30, tickfont_size=10, gridcolor=_grid),
+        yaxis=dict(gridcolor=_grid),
         title="Normal Readings vs Fault-Injected Values",
     )
 

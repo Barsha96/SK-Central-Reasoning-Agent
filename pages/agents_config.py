@@ -1,17 +1,10 @@
 """Agents Configuration — system prompts, control loops, and data pipeline functions."""
 import streamlit as st
+from utils.theme import apply_theme, page_css
 
-st.markdown("""
-<style>
-.stApp { background-color: #0f1117; }
-#MainMenu { visibility: hidden; }
-footer { visibility: hidden; }
-.stDeployButton { display: none; }
-h1, h2, h3 { color: #7eb3d4 !important; }
-.block-container { padding-top: 1rem !important; }
-.stExpander { border: 1px solid #2a2d3a !important; border-radius: 8px !important; }
-</style>
-""", unsafe_allow_html=True)
+_dark = st.session_state.get("dark_mode", False)
+_expander_border = "#2a2d3a" if _dark else "#c0cce0"
+st.markdown(page_css(f".stExpander {{ border: 1px solid {_expander_border} !important; border-radius: 8px !important; }}"), unsafe_allow_html=True)
 
 # ── Page header ───────────────────────────────────────────────────────────────
 st.markdown("# 🤖 Agents Configuration")
@@ -25,7 +18,7 @@ st.markdown("---")
 
 # ── Architecture overview ─────────────────────────────────────────────────────
 st.markdown("### System Architecture")
-st.components.v1.html("""
+_ARCH_HTML = """
 <!DOCTYPE html><html><head><meta charset="utf-8">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -78,7 +71,8 @@ body { background: transparent; font-family: 'Segoe UI', sans-serif; padding: 12
   </div>
 </div>
 </body></html>
-""", height=380)
+"""
+st.components.v1.html(apply_theme(_ARCH_HTML), height=380)
 
 st.markdown("---")
 
@@ -749,10 +743,12 @@ for fn in FUNCTIONS:
 
 st.markdown("---")
 st.markdown(
-    "<div style='text-align:center; color:#556677; font-size:11px; margin-top:8px;'>"
-    "All agents use <strong>Claude Sonnet 4.6</strong> via the Anthropic SDK. "
-    "Orchestration follows the Semantic Kernel agent pattern described in the IEEE research paper. "
-    "Switch to the <strong>Live Demo</strong> tab to see these agents run in real time."
-    "</div>",
+    apply_theme(
+        "<div style='text-align:center; color:#556677; font-size:11px; margin-top:8px;'>"
+        "All agents use <strong>Claude Sonnet 4.6</strong> via the Anthropic SDK. "
+        "Orchestration follows the Semantic Kernel agent pattern described in the research paper. "
+        "Switch to the <strong>Live Demo</strong> tab to see these agents run in real time."
+        "</div>"
+    ),
     unsafe_allow_html=True,
 )

@@ -110,7 +110,7 @@ def _slide1_agenda(prs, blank) -> None:
     _bg(s, BG)
     _stripe(s, BLUE)
 
-    _tb(s, "IEEE PES Boston Chapter  ·  April 2026",
+    _tb(s, "April 2026",
         0.6, 0.18, 12, 0.28, size=9, color=MUTED)
     _tb2(s, [
             ("Near-Closed-Loop Control in ", TEXT, True),
@@ -137,7 +137,7 @@ def _slide1_agenda(prs, blank) -> None:
         _tb(s, title, x+0.18, y+0.42, w-0.4, 0.34, size=12, color=TEXT,  bold=True)
         _tb(s, desc,  x+0.18, y+0.82, w-0.4, 0.46, size=10, color=TDIM)
 
-    _tb(s, "Barsha Upadhyaya  ·  University of Toledo",
+    _tb(s, "Barsha Upadhyaya",
         0.6, 7.18, 12, 0.26, size=8, color=RGBColor(0x2a, 0x4a, 0x6a))
 
 

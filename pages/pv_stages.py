@@ -1,16 +1,8 @@
 """PV Manufacturing Stages — educational overview page."""
 import streamlit as st
+from utils.theme import apply_theme, page_css
 
-st.markdown("""
-<style>
-.stApp { background-color: #0f1117; }
-#MainMenu { visibility: hidden; }
-footer { visibility: hidden; }
-.stDeployButton { display: none; }
-h1, h2, h3 { color: #7eb3d4 !important; }
-.block-container { padding-top: 1rem !important; }
-</style>
-""", unsafe_allow_html=True)
+st.markdown(page_css(), unsafe_allow_html=True)
 
 STAGES = [
     {
@@ -218,7 +210,7 @@ st.markdown("---")
 
 # ── Production flow diagram ───────────────────────────────────────────────────
 st.markdown("### Production Flow")
-st.components.v1.html("""
+_FLOW_HTML = """
 <!DOCTYPE html><html><head><meta charset="utf-8">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -249,7 +241,8 @@ body { background: transparent; font-family: 'Segoe UI', sans-serif; padding: 8p
   <div class="flow-node"><div class="ficon">✅</div><div class="fname">QA<br>Testing</div></div>
 </div>
 </body></html>
-""", height=90)
+"""
+st.components.v1.html(apply_theme(_FLOW_HTML), height=90)
 
 st.markdown("---")
 
@@ -257,7 +250,7 @@ st.markdown("---")
 for stage in STAGES:
     with st.container():
         st.markdown(
-            f"""
+            apply_theme(f"""
 <div style="
   background: {stage['color']}22;
   border: 1.5px solid {stage['border']};
@@ -276,7 +269,7 @@ for stage in STAGES:
     </div>
   </div>
 </div>
-""",
+"""),
             unsafe_allow_html=True,
         )
 
@@ -288,9 +281,11 @@ for stage in STAGES:
             st.markdown("**Why it matters**")
             st.markdown(stage["why"])
             st.markdown(
-                f"<div style='background:#0f1117; border-left:3px solid {stage['border']}; "
-                f"padding:8px 12px; border-radius:4px; font-size:12px; color:#8899aa; margin-top:8px;'>"
-                f"⚛ <em>{stage['key_physics']}</em></div>",
+                apply_theme(
+                    f"<div style='background:#0f1117; border-left:3px solid {stage['border']}; "
+                    f"padding:8px 12px; border-radius:4px; font-size:12px; color:#8899aa; margin-top:8px;'>"
+                    f"⚛ <em>{stage['key_physics']}</em></div>"
+                ),
                 unsafe_allow_html=True,
             )
 
@@ -298,12 +293,14 @@ for stage in STAGES:
             st.markdown("**Monitored parameters**")
             for metric_name, unit, note in stage["metrics"]:
                 st.markdown(
-                    f"<div style='background:#1a1d27; border:1px solid #2a2d3a; border-radius:6px; "
-                    f"padding:7px 10px; margin-bottom:6px;'>"
-                    f"<span style='font-size:12px; font-weight:700; color:#a0d4ff;'>{metric_name}</span> "
-                    f"<span style='font-size:11px; color:#556677;'>({unit})</span><br>"
-                    f"<span style='font-size:11px; color:#7a8a9a;'>{note}</span>"
-                    f"</div>",
+                    apply_theme(
+                        f"<div style='background:#1a1d27; border:1px solid #2a2d3a; border-radius:6px; "
+                        f"padding:7px 10px; margin-bottom:6px;'>"
+                        f"<span style='font-size:12px; font-weight:700; color:#a0d4ff;'>{metric_name}</span> "
+                        f"<span style='font-size:11px; color:#556677;'>({unit})</span><br>"
+                        f"<span style='font-size:11px; color:#7a8a9a;'>{note}</span>"
+                        f"</div>"
+                    ),
                     unsafe_allow_html=True,
                 )
 
@@ -311,10 +308,12 @@ for stage in STAGES:
 
 # ── Footer note ───────────────────────────────────────────────────────────────
 st.markdown(
-    "<div style='text-align:center; color:#556677; font-size:11px; margin-top:8px;'>"
-    "All sensor thresholds and stage parameters reflect the control loop design described in the "
-    "IEEE research paper. Switch to the <strong>Live Demo</strong> tab to see the AI agent respond "
-    "to a real-time fault injection across these stages."
-    "</div>",
+    apply_theme(
+        "<div style='text-align:center; color:#556677; font-size:11px; margin-top:8px;'>"
+        "All sensor thresholds and stage parameters reflect the control loop design described in the "
+        "research paper. Switch to the <strong>Live Demo</strong> tab to see the AI agent respond "
+        "to a real-time fault injection across these stages."
+        "</div>"
+    ),
     unsafe_allow_html=True,
 )

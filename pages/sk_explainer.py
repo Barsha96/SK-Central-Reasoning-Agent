@@ -1,16 +1,8 @@
 """How Semantic Kernel Works — technical deep-dive with diagrams and code."""
 import streamlit as st
+from utils.theme import apply_theme, page_css
 
-st.markdown("""
-<style>
-.stApp { background-color: #0f1117; }
-#MainMenu { visibility: hidden; }
-footer { visibility: hidden; }
-.stDeployButton { display: none; }
-h1, h2, h3 { color: #7eb3d4 !important; }
-.block-container { padding-top: 1rem !important; }
-</style>
-""", unsafe_allow_html=True)
+st.markdown(page_css(), unsafe_allow_html=True)
 
 st.markdown("# ⚙️ How Semantic Kernel Works")
 st.markdown(
@@ -41,7 +33,7 @@ with col1:
         "is a SK Plugin."
     )
 with col2:
-    st.components.v1.html("""
+    _SK_ARCH_HTML = """
 <!DOCTYPE html><html><head><meta charset="utf-8">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -73,7 +65,8 @@ body { background: transparent; font-family: 'Segoe UI', sans-serif; padding: 8p
   </div>
 </div>
 </body></html>
-""", height=310)
+"""
+    st.components.v1.html(apply_theme(_SK_ARCH_HTML), height=310)
 
 st.markdown("---")
 
@@ -317,7 +310,7 @@ st.markdown(
     "The diagram below shows the full message flow."
 )
 
-st.components.v1.html("""
+_SEQ_HTML = """
 <!DOCTYPE html><html><head><meta charset="utf-8">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -542,7 +535,8 @@ body { background: transparent; font-family: 'Segoe UI', sans-serif; padding: 10
 
 </div>
 </body></html>
-""", height=820)
+"""
+st.components.v1.html(apply_theme(_SEQ_HTML), height=820)
 
 st.markdown("---")
 
@@ -756,38 +750,44 @@ col_sk, col_py = st.columns(2)
 
 with col_sk:
     st.markdown(
-        "<div style='background:#0f1f35;border:1.5px solid #2a6a9c;border-radius:8px;padding:14px;'>"
-        "<div style='font-size:13px;font-weight:800;color:#a0d4ff;margin-bottom:8px;'>🔵 Semantic Kernel</div>"
-        "<ul style='font-size:12px;color:#8eb3d4;line-height:2;list-style:none;padding:0;'>"
-        "<li>✓ <code>AnthropicChatCompletion</code> — wraps the Anthropic SDK into SK's provider-agnostic interface</li>"
-        "<li>✓ <code>Kernel.add_service()</code> — central service registry</li>"
-        "<li>✓ Plugin class pattern — makes expert classes discoverable by the Kernel</li>"
-        "<li>✓ Provider abstraction — swap Claude for GPT-4 by changing one line in kernel_setup.py</li>"
-        "<li>✓ Future path — SK's <code>ChatCompletionAgent</code> and automatic tool-calling for fully autonomous routing</li>"
-        "</ul></div>",
+        apply_theme(
+            "<div style='background:#0f1f35;border:1.5px solid #2a6a9c;border-radius:8px;padding:14px;'>"
+            "<div style='font-size:13px;font-weight:800;color:#a0d4ff;margin-bottom:8px;'>🔵 Semantic Kernel</div>"
+            "<ul style='font-size:12px;color:#8eb3d4;line-height:2;list-style:none;padding:0;'>"
+            "<li>✓ <code>AnthropicChatCompletion</code> — wraps the Anthropic SDK into SK's provider-agnostic interface</li>"
+            "<li>✓ <code>Kernel.add_service()</code> — central service registry</li>"
+            "<li>✓ Plugin class pattern — makes expert classes discoverable by the Kernel</li>"
+            "<li>✓ Provider abstraction — swap Claude for GPT-4 by changing one line in kernel_setup.py</li>"
+            "<li>✓ Future path — SK's <code>ChatCompletionAgent</code> and automatic tool-calling for fully autonomous routing</li>"
+            "</ul></div>"
+        ),
         unsafe_allow_html=True,
     )
 
 with col_py:
     st.markdown(
-        "<div style='background:#1a1f0a;border:1.5px solid #4a6a0a;border-radius:8px;padding:14px;'>"
-        "<div style='font-size:13px;font-weight:800;color:#a0d4a0;margin-bottom:8px;'>🟢 Python Orchestration</div>"
-        "<ul style='font-size:12px;color:#8eb3b4;line-height:2;list-style:none;padding:0;'>"
-        "<li>✓ Expert routing — reads <code>primary_expert</code> from the fault scenario JSON</li>"
-        "<li>✓ Streaming pipeline — sequences triage → primary → secondary as a Python generator</li>"
-        "<li>✓ Speaker tagging — labels each chunk with 'triage' / 'expert_primary' / 'expert_secondary'</li>"
-        "<li>✓ UI rendering — routes tagged chunks to the correct <code>st.chat_message()</code> bubble</li>"
-        "<li>✓ Report assembly — collects full text per speaker and passes to python-docx exporter</li>"
-        "</ul></div>",
+        apply_theme(
+            "<div style='background:#1a1f0a;border:1.5px solid #4a6a0a;border-radius:8px;padding:14px;'>"
+            "<div style='font-size:13px;font-weight:800;color:#a0d4a0;margin-bottom:8px;'>🟢 Python Orchestration</div>"
+            "<ul style='font-size:12px;color:#8eb3b4;line-height:2;list-style:none;padding:0;'>"
+            "<li>✓ Expert routing — reads <code>primary_expert</code> from the fault scenario JSON</li>"
+            "<li>✓ Streaming pipeline — sequences triage → primary → secondary as a Python generator</li>"
+            "<li>✓ Speaker tagging — labels each chunk with 'triage' / 'expert_primary' / 'expert_secondary'</li>"
+            "<li>✓ UI rendering — routes tagged chunks to the correct <code>st.chat_message()</code> bubble</li>"
+            "<li>✓ Report assembly — collects full text per speaker and passes to python-docx exporter</li>"
+            "</ul></div>"
+        ),
         unsafe_allow_html=True,
     )
 
 st.markdown("")
 st.markdown(
-    "<div style='text-align:center; color:#556677; font-size:11px; margin-top:8px;'>"
-    "This architecture follows the paper's design: a <em>centralized reasoning agent</em> "
-    "coordinating <em>specialist expert sub-agents</em>, implemented with Semantic Kernel as the "
-    "AI service layer and Python as the orchestration layer."
-    "</div>",
+    apply_theme(
+        "<div style='text-align:center; color:#556677; font-size:11px; margin-top:8px;'>"
+        "This architecture follows the paper's design: a <em>centralized reasoning agent</em> "
+        "coordinating <em>specialist expert sub-agents</em>, implemented with Semantic Kernel as the "
+        "AI service layer and Python as the orchestration layer."
+        "</div>"
+    ),
     unsafe_allow_html=True,
 )

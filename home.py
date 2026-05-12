@@ -9,22 +9,15 @@ from data.simulator import PVSimulator
 from ui.conveyor_panel import render_conveyor, build_stage_statuses, build_stage_metrics_for_ui
 from ui.agent_panel import render_agent_panel
 from utils.report_exporter import generate_report
+from utils.theme import page_css
 
-st.markdown("""
-<style>
-.stApp { background-color: #0f1117; }
-#MainMenu { visibility: hidden; }
-footer { visibility: hidden; }
-.stDeployButton { display: none; }
-h1, h2, h3 { color: #7eb3d4 !important; }
-.block-container { padding-top: 1rem !important; }
+st.markdown(page_css("""
 .stDownloadButton > button {
     background: #1a5276; color: white;
     border: none; font-weight: 600;
     width: 100%; margin-top: 12px;
 }
-</style>
-""", unsafe_allow_html=True)
+"""), unsafe_allow_html=True)
 
 # ── Session state ─────────────────────────────────────────────────────────────
 if "simulator"    not in st.session_state:
@@ -43,7 +36,7 @@ if "report_bytes" not in st.session_state:
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown("## ☀️ PV Control System")
-    st.markdown("**IEEE PES Boston Chapter Demo**")
+    st.markdown("**Agentic AI Demo**")
     st.markdown("---")
 
     if not st.session_state.running:
