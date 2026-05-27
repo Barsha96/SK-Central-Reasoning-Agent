@@ -15,6 +15,7 @@ with st.sidebar:
     st.toggle("🌙 Dark mode", key="dark_mode")
 
 pg = st.navigation([
+    st.Page("pages/introduction.py",      title="Introduction",        icon="📑", url_path="introduction"),
     st.Page("pages/pv_stages.py",         title="PV Stages",           icon="🏭", url_path="pv_stages"),
     st.Page("home.py",                    title="Live Demo",            icon="☀️", default=True),
     st.Page("pages/synthetic_data.py",    title="Synthetic Data",      icon="📊", url_path="synthetic_data"),
